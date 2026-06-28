@@ -1,0 +1,10 @@
+logs/
+.env
+config/gcp-key.json
+__pycache__/
+*.pyc
+.DS_Store
+dbt/target/
+dbt/dbt_packages/
+data/
+.venv/

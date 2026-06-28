@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+
+  airflow:
+    image: apache/airflow:3.0.0
+    command: standalone
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/config/gcp-key.json
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCS_BUCKET_NAME: ${GCS_BUCKET_NAME}
+      # _AIRFLOW_WWW_USER_USERNAME: admin
+      # _AIRFLOW_WWW_USER_PASSWORD: admin
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: 'true'
+    volumes:
+      - /mnt/e/PROJETOS/earthquake-pipeline/dags:/opt/airflow/dags
+      - /mnt/e/PROJETOS/earthquake-pipeline/logs:/opt/airflow/logs
+      - /mnt/e/PROJETOS/earthquake-pipeline/plugins:/opt/airflow/plugins
+      - /mnt/e/PROJETOS/earthquake-pipeline/config:/opt/airflow/config
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    user: "${AIRFLOW_UID:-50000}:0"
+
+volumes:
+  postgres-db-volume:
