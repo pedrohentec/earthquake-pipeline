@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: silver_earthquakes
+    description: "Cleaned and typed earthquake events from USGS"
+    columns:
+      - name: id
+        description: "Unique earthquake identifier per extraction"
+        data_tests:
+          - not_null
+      - name: magnitude
+        description: "Earthquake magnitude"
+        data_tests:
+          - not_null
+      - name: latitude
+        description: "Latitude coordinate"
+        data_tests:
+          - not_null
+      - name: longitude
+        description: "Longitude coordinate"
+        data_tests:
+          - not_null
+      - name: magnitude_class
+        description: "Magnitude classification"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['micro', 'minor', 'moderate', 'strong', 'major', 'great']
+      - name: depth_class
+        description: "Depth classification"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['shallow', 'intermediate', 'deep']
