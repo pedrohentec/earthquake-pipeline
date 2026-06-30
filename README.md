@@ -38,6 +38,6 @@ earthquake-pipeline/
 
 - [x] Phase 1 — Environment (Docker + Airflow 3)
 - [x] Phase 2 — Local ingestion (USGS API + Parquet)
-- [ ] Phase 3 — Orchestration with Airflow
+- [x] Phase 3 — Orchestration with Airflow
 - [ ] Phase 4 — dbt + BigQuery
 - [ ] Phase 5 — Looker Studio
