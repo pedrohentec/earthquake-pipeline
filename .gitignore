@@ -8,3 +8,8 @@ dbt/target/
 dbt/dbt_packages/
 data/
 .venv/
+*.duckdb
+dbt/logs/
+dbt/earthquake_dbt/target/
+dbt/earthquake_dbt/dbt_packages/
+dbt/earthquake_dbt/logs/

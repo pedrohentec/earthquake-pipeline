@@ -1,13 +1,20 @@
 version: 2
 
 models:
-  - name: silver_earthquakes
-    description: "Cleaned and typed earthquake events from USGS"
+  - name: silver_earthquakes_unified
+    description: "Cleaned and unified earthquake events from USGS and USP/IAG"
     columns:
       - name: id
         description: "Unique earthquake identifier per extraction"
         data_tests:
           - not_null
+      - name: source
+        description: "Data source: USGS or USP"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['USGS', 'USP']
       - name: magnitude
         description: "Earthquake magnitude"
         data_tests:

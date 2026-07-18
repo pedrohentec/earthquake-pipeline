@@ -9,13 +9,13 @@ from pathlib import Path
 USGS_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"
 
 
-def fetch_earthquakes() -> dict:
+def fetch_earthquakes_usgs() -> dict:
     response = requests.get(USGS_URL, timeout=30)
     response.raise_for_status()
     return response.json()
 
 
-def parse_earthquakes(raw: dict) -> pd.DataFrame:
+def parse_earthquakes_usgs(raw: dict) -> pd.DataFrame:
     features = raw.get("features", [])
 
     records = []
@@ -35,17 +35,18 @@ def parse_earthquakes(raw: dict) -> pd.DataFrame:
             "longitude": geo["coordinates"][0] if geo else None,
             "latitude": geo["coordinates"][1] if geo else None,
             "extracted_at": datetime.now(tz=timezone.utc),
+            "source": "USGS",
         })
 
     return pd.DataFrame(records)
 
 
-def save_local_parquet(df: pd.DataFrame, base_path: str = "data/raw") -> Path:
+def save_local_parquet_usgs (df: pd.DataFrame, base_path: str = "data/raw_usgs") -> Path:
     now = datetime.now(tz=timezone.utc)
     partition = Path(base_path) / f"year={now.year}" / f"month={now.month:02d}" / f"day={now.day:02d}"
     partition.mkdir(parents=True, exist_ok=True)
 
-    filename = f"earthquakes_{now.strftime('%Y%m%d_%H%M')}.parquet"
+    filename = f"earthquakes_usgs_{now.strftime('%Y%m%d_%H%M')}.parquet"
     filepath = partition / filename
 
     table = pa.Table.from_pandas(df)
@@ -56,10 +57,10 @@ def save_local_parquet(df: pd.DataFrame, base_path: str = "data/raw") -> Path:
 
 if __name__ == "__main__":
     print("Fetching data from USGS...")
-    raw = fetch_earthquakes()
-    df = parse_earthquakes(raw)
+    raw = fetch_earthquakes_usgs()
+    df = parse_earthquakes_usgs(raw)
     print(f"{len(df)} events found")
     print(df[["magnitude", "place", "time_utc", "depth_km"]].head())
 
-    path = save_local_parquet(df)
+    path = save_local_parquet_usgs (df)
     print(f"Saved to: {path}")

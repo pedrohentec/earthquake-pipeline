@@ -20,13 +20,13 @@ def get_minio_client():
     )
 
 
-def upload_to_minio(local_filepath: str) -> str:
+def upload_to_minio(local_filepath: str, prefix: str = "earthquakes") -> str:
     client = get_minio_client()
     path = Path(local_filepath)
 
     now = datetime.now(tz=timezone.utc)
     object_key = (
-        f"earthquakes/"
+        f"{prefix}/"
         f"year={now.year}/"
         f"month={now.month:02d}/"
         f"day={now.day:02d}/"

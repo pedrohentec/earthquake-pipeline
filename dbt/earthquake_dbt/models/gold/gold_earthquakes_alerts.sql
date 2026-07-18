@@ -12,6 +12,6 @@ SELECT
     longitude,
     alert,
     url
-FROM {{ ref('silver_earthquakes') }}
+FROM {{ ref('silver_earthquakes_unified') }}
 WHERE magnitude >= 5.0
 ORDER BY magnitude DESC, time_utc DESC

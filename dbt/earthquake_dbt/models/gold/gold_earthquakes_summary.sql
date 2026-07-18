@@ -8,6 +8,6 @@ SELECT
     ROUND(AVG(magnitude), 2)        AS avg_magnitude,
     ROUND(MAX(magnitude), 2)        AS max_magnitude,
     ROUND(AVG(depth_km), 2)         AS avg_depth_km
-FROM {{ ref('silver_earthquakes') }}
+FROM {{ ref('silver_earthquakes_unified') }}
 GROUP BY 1, 2, 3
 ORDER BY 1 DESC

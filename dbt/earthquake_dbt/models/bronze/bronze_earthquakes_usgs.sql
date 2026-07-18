@@ -12,8 +12,10 @@ SELECT
     depth_km,
     longitude,
     latitude,
-    extracted_at
+    extracted_at,
+    source
 FROM read_parquet(
-    'E:/PROJETOS/earthquake-pipeline/data/raw/**/*.parquet',
-    hive_partitioning = true
+    '{{ var("raw_data_path") }}/raw_usgs/**/*.parquet',
+    hive_partitioning = true,
+    union_by_name = true
 )

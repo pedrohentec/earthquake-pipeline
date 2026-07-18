@@ -2,7 +2,9 @@ version: 2
 
 sources:
   - name: raw
-    description: "Raw earthquake data from USGS via MinIO (local Parquet files)"
+    description: "Raw earthquake data via MinIO (local Parquet files)"
     tables:
-      - name: earthquakes
-        description: "Raw earthquake events partitioned by year/month/day"
+      - name: earthquakes_usgs
+        description: "Raw earthquake events from USGS, partitioned by year/month/day"
+      - name: earthquakes_usp
+        description: "Raw earthquake events from USP/IAG (Brazilian Seismographic Network), partitioned by year/month/day"
